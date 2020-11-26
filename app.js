@@ -172,6 +172,7 @@ favMealHeight();
     }, 500 );
 });
 
+// user types in input and clicks 'search' icon
 searchBtn.addEventListener('click', async () => {
 
     mealsEl.innerHTML = "";
@@ -187,3 +188,23 @@ searchBtn.addEventListener('click', async () => {
 });
 
 
+// user types in input and hits enter
+document.getElementById("search-term").addEventListener("keyup", async (event) => {
+    event.preventDefault();
+    if (event.keyCode === 13) {
+        mealsEl.innerHTML = "";
+        
+        const search = searchTerm.value;
+        const meals = await getMealsBySearch(search);
+
+       
+        if (meals) {
+    meals.forEach((meal) => {
+        addMeal(meal);
+    });
+    }
+ 
+    }
+});
+
+   
