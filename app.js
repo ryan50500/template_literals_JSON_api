@@ -1,5 +1,11 @@
-const meals = document.getElementById('meals');
+const mealsEl = document.getElementById('meals');
 const favoriteContainer = document.getElementById('fav-meals');
+const mainContainer = document.querySelector('.fav-container');
+
+const searchTerm = document.getElementById('search-term');
+const searchBtn = document.getElementById('search');
+
+
 
 getRandomMeal();
 fetchFavMeals();
@@ -28,9 +34,14 @@ async function getMealById(id) {
 }
 
 async function getMealsBySearch(term) {
-    const meal = await fetch(
+    const resp = await fetch(
         "https://www.themealdb.com/api/json/v1/1/search.php?s=" + term
     );
+
+    const respData = await resp.json();
+    const meals = respData.meals;
+
+    return meals;
 }
 
 function addMeal(mealData, random = false) {
@@ -73,7 +84,7 @@ function addMeal(mealData, random = false) {
         fetchFavMeals();
     });
 
-    meals.appendChild(meal);
+    mealsEl.appendChild(meal);
 
 }
 
@@ -144,7 +155,35 @@ function addMealFav(mealData) {
        fetchFavMeals();
 
     });
-
     favoriteContainer.appendChild(favMeal);
-
 }
+
+window.addEventListener('load', function() {
+    setTimeout(function(){
+function favMealHeight() {
+    if (favoriteContainer.innerHTML.length == 0) {
+        console.log('its empty')
+        mainContainer.style.minHeight = "0px";
+    } else {
+        console.log('its NOT empty')
+    }
+}
+favMealHeight();
+    }, 500 );
+});
+
+searchBtn.addEventListener('click', async () => {
+
+    mealsEl.innerHTML = "";
+
+    const search = searchTerm.value;
+    const meals = await getMealsBySearch(search);
+
+    if (meals) {
+    meals.forEach((meal) => {
+        addMeal(meal);
+    });
+    }
+});
+
+
