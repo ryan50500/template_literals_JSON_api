@@ -167,6 +167,7 @@ header button {
        right: 0;
        top: 0;
        bottom: 0;
+       z-index: 10;
    }
    .popup-container.hidden { 
        opacity: 0;
@@ -215,10 +216,16 @@ header button {
 
 /* not-mobile */
 @media (min-width: 768px) {
-
 div#meal-popup img {
     max-width: 100%;
     padding: 0px 80px;
 }
 }
 
+/*mobile */
+@media (max-width: 767px) {
+.mobile-container {
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
