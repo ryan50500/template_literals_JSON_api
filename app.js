@@ -158,12 +158,14 @@ function addMealFav(mealData) {
 
     const btn = favMeal.querySelector('.clear');
 
-    btn.addEventListener('click',() => {
+    favMeal.addEventListener('click',() => {
        removeMealLS(mealData.idMeal);
 
        fetchFavMeals();
 
     });
+
+
     favoriteContainer.appendChild(favMeal);
 }
 
@@ -190,15 +192,44 @@ function showMealInfo(mealData) {
     // update the meal info
     const mealEl = document.createElement('div');
 
+    const ingredients = [];
+
+    // get ingredients and measure
+    for (let i = 1; i <= 20; i++) {
+        if (mealData["strIngredient" + i]) {
+            ingredients.push(
+                `${mealData["strIngredient" + i]}
+                - ${
+                    mealData["strMeasure" + i]
+                }`
+            );
+        } else {
+            break;
+        }
+    }
+
+
     mealEl.innerHTML = `
     
     <h1>${mealData.strMeal}</h1>
-    <img src="${mealData.strMealThumb}" alt="">
+    <img
+        src="${mealData.strMealThumb}"
+        alt="${mealData.strMeal}">
 
         <p>${mealData.strInstructions}
         </p>
-           `
-
+        <h3>Ingredients:</h3>
+        <ul>
+            ${ingredients
+                .map(
+                    (ing) => `
+                <li>${ing}</li>
+                `
+                    )
+                .join("")}
+        </ul>
+           `;
+  // .join() above to convert from array to string
     mealInfoEl.appendChild(mealEl);
 
     // show the pop up
