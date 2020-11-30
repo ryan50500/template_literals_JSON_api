@@ -10,6 +10,13 @@ const popupCloseBtn = document.getElementById('close-popup');
 const searchTerm = document.getElementById('search-term');
 const searchBtn = document.getElementById('search');
 
+// input header
+const inputBar = document.querySelector('header');
+
+// input header height
+const inputBarHeight = inputBar.offsetHeight;
+
+// const mobileContainer = document.querySelector('.mobile-container');
 
 
 getRandomMeal();
@@ -275,4 +282,19 @@ document.getElementById("search-term").addEventListener("keyup", async (event) =
 popupCloseBtn.addEventListener('click', () => {
     mealPopup.classList.add('hidden');
 });
-   
+
+
+
+
+// sticky input field
+window.addEventListener('scroll', function() {
+    if (inputBarHeight < window.scrollY ) {
+        console.log('tomas is great');
+        inputBar.classList.add('sticky')
+    }
+    else {
+        inputBar.classList.remove('sticky')
+    }
+});
+
+console.log(window.scrollY);
