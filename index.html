@@ -1,47 +1,67 @@
-
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, 
      user-scalable=0">
-    <title>Recipes App</title>
+    <title>Ninja Menu</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <link rel="stylesheet" href="style.css">
     <script src="app.js" defer></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
-    <div class="mobile-container">
-        <header>
-            <input type="text" id="search-term" />
-            <button id="search"><i class="fas fa-search"></i></button>
-        </header>
-        <div class="fav-container">
-            <h3>Favourite Meals</h3>
-            <ul class="fav-meals" id="fav-meals">
-          
-            </ul>
-        </div>
+
+    <!-- menu container -->
+    <div class="container">
+        <h1>Ninja Menu</h1>
         <div class="meals" id="meals">
           
         </div>
-    </div>
-
-
-    <div class="popup-container hidden" 
-    id="meal-popup">
-    <div class="popup">
-        <button id="close-popup"
-        class="close-popup">
-            <i class="fas fa-times"></i>
-        </button>
-      
-        <div class="meal-info"
-        id="meal-info">
-
-       
-        </div>
       
     </div>
-</div>
+
+    <!-- user form -->
+     <!-- form section -->
+     <p class="form_comment">Comments</p>
+     <div class="form_section">
+        <form onsubmit="return validate()" target="_blank" id="myForm" method="post" action="action_page.php">
+            <div class="flex_form">
+                <p class="fname center">Name:*</p>
+                <div class="wrap_fields">
+                    <input type="text" id="fname" name="firstname" />
+                    <p class="name_error error">Please enter your name</p>
+                </div>
+            </div>
+            <br />
+            <div class="flex_form">
+                <p class="fname center">Company:</p>
+                <div class="wrap_fields">
+                    <input type="text" id="companyName" name="company" />
+                </div>
+            </div>
+            <br />
+            <div class="flex_form">
+                <p class="email center">Email:*</p>
+                <div class="wrap_fields">
+                    <input type="text" id="email" name="email" />
+                    <p class="email_error error">Please enter a valid email address</p>
+                </div>
+            </div>
+            <br />
+            <div class="flex_form">
+                <p class="comment center">Comment:*</p>
+                <div class="wrap_fields">
+                    <textarea id="subject" name="comment" style="height: 200px;"></textarea>
+                    <p class="comment_error error">Please leave a comment</p>
+                    <p class="thank_you">Thank you for your enquirry!</p>
+                </div>
+            </div>
+            <br />
+            <button type="submit" id="submit_button">SUBMIT</button>
+            <br />
+            <!-- <input type="submit" value="Submit"> -->
+        </form>
+    </div>
+
 </body>
 </html>

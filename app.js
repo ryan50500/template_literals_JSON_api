@@ -1,300 +1,174 @@
-const mealsEl = document.getElementById('meals');
-const favoriteContainer = document.getElementById('fav-meals');
-const mainContainer = document.querySelector('.fav-container');
-const mealPopup = document.getElementById('meal-popup');
 
-const mealInfoEl = document.getElementById('meal-info');
+const meals = document.getElementById('meals');
 
-const popupCloseBtn = document.getElementById('close-popup');
+async function fetchData() {
 
-const searchTerm = document.getElementById('search-term');
-const searchBtn = document.getElementById('search');
+    const response = await fetch('https://dev.menu.ninja/api/menu/156?key=8j5vfe%24*pfb**rzt&pretty=1');
+    const data = await response.json();
+    const menuData = data.menu.items;
 
-// input header
-const inputBar = document.querySelector('header');
-
-// input header height
-const inputBarHeight = inputBar.offsetHeight;
-
-// const mobileContainer = document.querySelector('.mobile-container');
-
-
-getRandomMeal();
-fetchFavMeals();
-
-async function getRandomMeal() {
-    const resp = await fetch(
-        "https://www.themealdb.com/api/json/v1/1/random.php"
-    );
-    const respData = await resp.json();
-    const randomMeal = respData.meals[0];
-
-    addMeal(randomMeal, true);
-}
-
-async function getMealById(id) {
-    const resp = await fetch(
-        "https://www.themealdb.com/api/json/v1/1/lookup.php?i=" + id
-    );
-
-    const respData = await resp.json();
-
-    const meal = respData.meals[0];
-
-    return meal;
-
-}
-
-async function getMealsBySearch(term) {
-    const resp = await fetch(
-        "https://www.themealdb.com/api/json/v1/1/search.php?s=" + term
-    );
-
-    const respData = await resp.json();
-    const meals = respData.meals;
-
-    return meals;
-}
-
-function addMeal(mealData, random = false) {
-    const meal = document.createElement('div');
-    meal.classList.add('meal');
-
-    meal.innerHTML = `
-            <div class="meal-header">
-            ${
-                random
-                   ? `
-            <span class="random"> Random Recipe</span>`
-                    : ""
-            }
-                <img
-                    src="${mealData.strMealThumb}"
-                    alt="${mealData.strMeal}"
-                />
-            <div class="meal-body">
-                <h4>${mealData.strMeal}</h4>
-                <button class="fav-btn">
-                    <i class="fas fa-heart"></i>
-                    </button>
-            </div>
-    `;
-
-    const btn =  meal.querySelector('.meal-body .fav-btn');
+        meals.innerHTML = `
     
-    btn.addEventListener('click', (e) => {
-        if(btn.classList.contains('active')) {
-            removeMealLS(mealData.idMeal)
-            btn.classList.remove('active');
-        } else {
-            addMealLS(mealData.idMeal);
-            btn.classList.add('active');
-        }
-        e.target.classList.toggle('active')
-
-      
-        fetchFavMeals();
-    });
-
-    meal.addEventListener('click', () => {
-        showMealInfo(mealData);
-    });
-
-    mealsEl.appendChild(meal);
-
-}
-
-// add meals to local storage
-function addMealLS(mealId) {
-    const mealIds = getMealsLS();
-
-    localStorage.setItem("mealIds", JSON.stringify
-    ([...mealIds, mealId]));
-}
-
-
-function removeMealLS(mealId) {
-    const mealIds = getMealsLS();
-
-    localStorage.setItem(
-        "mealIds",
-        JSON.stringify(mealIds.filter((id) => id
-        !== mealId))
-    );
-}
-
-function getMealsLS() {
-    const mealIds =  JSON.parse(localStorage.
-        getItem("mealIds"));
-
-        return mealIds === null ? [] : mealIds;
-}
-
-async function fetchFavMeals() {
-  // clean the container
-  favoriteContainer.innerHTML = ""
-
-    const mealIds = getMealsLS();
-
-    for(let i=0; i<mealIds.length; i++) {
-        const mealId = mealIds[i];
-        meal = await getMealById(mealId);
-
-        addMealFav(meal);
-    }
-
-    console.log(meals);
-
-    // add them to the screen
-}
-
-
-
-function addMealFav(mealData) {
-    const favMeal = document.createElement('li');
-    // meal.classList.add('meal');
-
-    favMeal.innerHTML = `
-        <img   
-            src="${mealData.strMealThumb}"
-            alt="${mealData.strMeal}"
-        /><span>${mealData.strMeal}</span>
-        <button class="clear"><i class="fas
-        fa-window-close"></i></button>
-    `;
-
-    const btn = favMeal.querySelector('.clear');
-
-    favMeal.addEventListener('click',() => {
-       removeMealLS(mealData.idMeal);
-
-       fetchFavMeals();
-
-    });
-
-
-    favoriteContainer.appendChild(favMeal);
-}
-
-window.addEventListener('load', function() {
-    setTimeout(function(){
-function favMealHeight() {
-    if (favoriteContainer.innerHTML.length == 0) {
-        console.log('its empty')
-        mainContainer.style.minHeight = "0px";
-    } else {
-        console.log('its NOT empty')
-    }
-}
-favMealHeight();
-    }, 500 );
-});
-
-
-function showMealInfo(mealData) {
-
-    // clean it up
-    mealInfoEl.innerHTML = "";
-
-    // update the meal info
-    const mealEl = document.createElement('div');
-
-    const ingredients = [];
-
-    // get ingredients and measure
-    for (let i = 1; i <= 20; i++) {
-        if (mealData["strIngredient" + i]) {
-            ingredients.push(
-                `${mealData["strIngredient" + i]}
-                - ${
-                    mealData["strMeasure" + i]
-                }`
-            );
-        } else {
-            break;
-        }
-    }
-
-
-    mealEl.innerHTML = `
-    
-    <h1>${mealData.strMeal}</h1>
-    <img
-        src="${mealData.strMealThumb}"
-        alt="${mealData.strMeal}">
-
-        <p>${mealData.strInstructions}
-        </p>
-        <h3>Ingredients:</h3>
-        <ul>
-            ${ingredients
-                .map(
-                    (ing) => `
-                <li>${ing}</li>
-                `
-                    )
-                .join("")}
-        </ul>
-           `;
-  // .join() above to convert from array to string
-    mealInfoEl.appendChild(mealEl);
-
-    // show the pop up
-    mealPopup.classList.remove('hidden');
-}
-
-// user types in input and clicks 'search' icon
-searchBtn.addEventListener('click', async () => {
-
-    mealsEl.innerHTML = "";
-
-    const search = searchTerm.value;
-    const meals = await getMealsBySearch(search);
-
-    if (meals) {
-    meals.forEach((meal) => {
-        addMeal(meal);
-    });
-    }
-});
-
-
-// user types in input and hits enter
-document.getElementById("search-term").addEventListener("keyup", async (event) => {
-    event.preventDefault();
-    if (event.keyCode === 13) {
-        mealsEl.innerHTML = "";
+        <div class="flex">
+        <h2>${menuData[0].name}</h2>
+        <img
+            src="${menuData[0].image}"
+            alt="${menuData[0].details}">
         
-        const search = searchTerm.value;
-        const meals = await getMealsBySearch(search);
-
-       
-        if (meals) {
-    meals.forEach((meal) => {
-        addMeal(meal);
-    });
-    }
- 
-    }
-});
+            <p>${menuData[0].details}
+            </p>
+            </div>
 
 
-popupCloseBtn.addEventListener('click', () => {
-    mealPopup.classList.add('hidden');
-});
+            <div class="flex">
+        <h2>${menuData[1].name}</h2>
+        <img
+            src="${menuData[1].image}"
+            alt="${menuData[1].details}">
+        
+            <p>${menuData[1].details}
+            </p>
+            </div>
 
 
+            <div class="flex">
+            <h2>${menuData[2].name}</h2>
+            <img
+                src="${menuData[2].image}"
+                alt="${menuData[2].details}">
+            
+                <p>${menuData[2].details}
+                </p>
+                </div>
 
 
-// sticky input field
-window.addEventListener('scroll', function() {
-    if (inputBarHeight < window.scrollY ) {
-        console.log('tomas is great');
-        inputBar.classList.add('sticky')
-    }
-    else {
-        inputBar.classList.remove('sticky')
-    }
-});
+                <div class="flex">
+                <h2>${menuData[3].name}</h2>
+                <img
+                    src="${menuData[3].image}"
+                    alt="${menuData[3].details}">
+                
+                    <p>${menuData[3].details}
+                    </p>
+                    </div>
+        
 
-console.log(window.scrollY);
+                    <div class="flex">
+                    <h2>${menuData[4].name}</h2>
+                    <img
+                        src="${menuData[4].image}"
+                        alt="${menuData[4].details}">
+                    
+                        <p>${menuData[4].details}
+                        </p>
+                        </div>
+            
+
+                        <div class="flex">
+                        <h2>${menuData[5].name}</h2>
+                        <img
+                            src="${menuData[5].image}"
+                            alt="${menuData[5].details}">
+                        
+                            <p>${menuData[5].details}
+                            </p>
+                            </div>
+               `;
+               
+}
+fetchData();
+
+//  form validation
+    // validation on hitting 'Submit' button
+    function validate() {
+            var name = document.getElementById('fname');
+            var email = document.getElementById('email');
+            var subject = document.getElementById('subject');
+
+            if (name.value.trim() == "") {
+                $('.name_error').css('display', 'block');
+                name.style.border = "2px solid red";
+                $('.name_error').text('Please enter your name');
+            }
+            if (email.value.indexOf('@') < 1) {
+                $('.email_error').css('display', 'block');
+                email.style.border = "2px solid red";
+                $('.email_error').text('Please enter a valid email address');
+            }
+            if (subject.value.trim() == "") {
+                $('.comment_error').css('display', 'block');
+                subject.style.border = "2px solid red";
+                $('.comment_error').text('Please leave a comment');
+            }
+            else if (subject.value.length < 5 ) {
+                $('.comment_error').css('display', 'block');
+                $('.comment_error').text('Comment must be at least 5 characters');
+                subject.style.border = "2px solid red";
+            }
+            if (  subject.value.trim() == "" || email.value.indexOf('@') < 1 || name.value.trim() == "" )  {
+                return false;
+            }
+            else {
+                $('.thank_you').slideDown('slow');
+                name.style.border = "1px solid #ccc";
+                email.style.border = "1px solid #ccc";
+                subject.style.border = "1px solid #ccc";
+                document.getElementById("myForm").reset();
+                // removing thank you message after 4 seconds
+                    setTimeout(function(){
+                        $('.thank_you').slideUp('slow');
+                    }, 4000 );
+                    // stops form from being submitted
+                    return false;
+            }
+        }
+
+// validation on name field
+document.getElementById('fname').addEventListener('blur', validateName);
+function validateName() {
+    var name = document.getElementById('fname');
+    if (name.value.trim() == "") {
+                $('.name_error').css('display', 'block');
+                name.style.border = "2px solid red";
+            }
+            else {
+                $('.name_error').css('display', 'none');
+                name.style.border = "2px solid green";
+            }
+}
+
+// validation on email field
+document.getElementById('email').addEventListener('blur', validateEmail);
+function validateEmail() {
+    var email = document.getElementById('email');
+    if (email.value.indexOf('@') < 1) {
+                $('.email_error').css('display', 'block');
+                email.style.border = "2px solid red";
+            }
+            else {
+                $('.email_error').css('display', 'none');
+                email.style.border = "2px solid green";
+            }
+}
+
+// validation on comment field
+document.getElementById('subject').addEventListener('blur', validateComment);
+function validateComment() {
+    var subject = document.getElementById('subject');
+    if (subject.value.trim() == "") {
+                $('.comment_error').css('display', 'block');
+                $('.comment_error').text('Please leave a comment');
+                subject.style.border = "2px solid red";
+            }
+            else if (subject.value.length < 5 ) {
+                $('.comment_error').css('display', 'block');
+                $('.comment_error').text('Comment must be at least 5 characters');
+                subject.style.border = "2px solid red";
+            }
+            else {
+                $('.comment_error').css('display', 'none');
+                subject.style.border = "2px solid green";
+            }
+}
+
+
