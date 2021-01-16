@@ -38,7 +38,7 @@ font-family: fantasy
   margin: 25px 0 5px 0;
 }
 .flex p {
-    padding: 0 30%;
+    padding: 0 25%;
 }
 @media (min-width: 1024px) and (max-width: 1366px) {
     .center {
@@ -160,13 +160,44 @@ input[type=text], textarea {
   }
   .thank_you {
     display: none;
-    background: linear-gradient(#31a34f, #98e698);
-    color: #ffffff !important;
     border-radius: 10px;
-    padding: 10px;
+    padding: 0px 0 0px 0;
     text-align: center;
-    margin-top: 20px;
-  }
+    margin: 24px 0 0 0;
+    font-size: 21px;
+}
   .comment_error {
     display: none;
   }
+
+  /* mobile and ipad  */
+  @media (max-width:1024px) {
+    .flex p {
+      padding: 0 20%;
+    }
+  }
+
+  /* mobile */
+  @media (max-width:767px) {
+    .form_section {
+      position: relative;
+    }
+    textarea#subject {
+      width: 100%;
+  }
+    form#myForm {
+      position: absolute;
+      left: 0;
+      width: 100%;
+  }
+    body {
+    background: #EFEFBB;
+    }
+    .flex img {
+      border-radius: 40px;
+      width: calc(100% - 20px);
+    }
+    .flex h2 {
+    font-size: 24px;
+    }
+}
