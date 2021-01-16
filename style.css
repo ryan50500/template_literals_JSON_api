@@ -30,8 +30,12 @@ font-family: fantasy
     padding: 0 2%;
     width: 500px;
 }
+.flex img {
+  border-radius: 40px;
+}
 .flex h2 {
-    font-size: 28px;
+  font-size: 28px;
+  margin: 25px 0 5px 0;
 }
 .flex p {
     padding: 0 30%;
@@ -90,12 +94,13 @@ input[type=text], textarea {
   }
   p.form_comment {
     background-color: #cccccc;
-    padding: 12px 0 12px 10px;
+    padding: 4px 0;
     border-top-left-radius: 14px;
     border-top-right-radius: 14px;
     margin-bottom: 20px;
     text-align: center;
-  }
+    font-size: 30px;
+}
   .flex_form {
     display: -webkit-box;
     display: -ms-flexbox;
