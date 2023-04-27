@@ -6,59 +6,27 @@ async function fetchData() {
     const data = await response.json();
     const menuData = data.menu.items;
 
-    meals.innerHTML = `
-    
-    <div class="flex">
-        <h2>${menuData[0].name}</h2>
-        <img src="${menuData[0].image}"
-        alt="${menuData[0].details}">
-        <p>${menuData[0].details}</p>
-        <p>£${menuData[0].prices.price.price}</p>
-    </div>
+    // assign the array we are looping through to a variable called 'dataToShow'
+    let dataToShow = menuData.map((foodItem) => {
 
-    <div class="flex">
-        <h2>${menuData[1].name}</h2>
-        <img src="${menuData[1].image}"
-        alt="${menuData[1].details}">
-        <p>${menuData[1].details}</p>
-        <p>£${menuData[1].prices.price.price}</p>
-    </div>
+        return `
+        <div class="flex">
+            <h2>${foodItem.name}</h2>
+            <img src="${foodItem.image}"
+            alt="${foodItem.details}">
+            <p>${foodItem.details}</p>
+            <p>£${foodItem.prices.price.price}</p>
+        </div>
+    `
+    });
 
-    <div class="flex">
-        <h2>${menuData[2].name}</h2>
-        <img src="${menuData[2].image}"
-        alt="${menuData[2].details}">
-        <p>${menuData[2].details}</p>
-        <p>£${menuData[2].prices.price.price}</p>
-    </div>
-
-    <div class="flex">
-        <h2>${menuData[3].name}</h2>
-        <img src="${menuData[3].image}"
-        alt="${menuData[3].details}">
-        <p>${menuData[3].details}</p>
-        <p>£${menuData[3].prices.price.price}</p>
-    </div>
-
-    <div class="flex">
-        <h2>${menuData[4].name}</h2>
-        <img src="${menuData[4].image}"
-        alt="${menuData[4].details}">
-        <p>${menuData[4].details}</p>
-        <p>£${menuData[4].prices.price.price}</p>
-    </div>
-
-    <div class="flex">
-        <h2>${menuData[5].name}</h2>
-        <img src="${menuData[5].image}"
-        alt="${menuData[5].details}">
-        <p>${menuData[5].details}</p>
-        <p>£${menuData[5].prices.price.price}</p>
-    </div>
-           `;
-
+    // set the empty div to be the template literal HTML
+    meals.innerHTML = dataToShow;
 }
+
 fetchData();
+
+
 
 //  form validation
 // validation on hitting 'Submit' button
@@ -95,7 +63,7 @@ function validate() {
         subject.style.border = "1px solid #ccc";
         document.getElementById("myForm").reset();
         // removing thank you message after 4 seconds
-        setTimeout(function() {
+        setTimeout(function () {
             $('.thank_you').slideUp('slow');
         }, 4000);
         // stops form from being submitted
