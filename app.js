@@ -9,7 +9,7 @@ async function fetchData() {
     // assign the array we are looping through to a variable called 'dataToShow'
     let dataToShow = menuData.map((foodItem) => {
 
-      return  `
+        return `
         <div class="flex">
             <h2>${foodItem.name}</h2>
             <img src="${foodItem.image}"
@@ -63,7 +63,7 @@ function validate() {
         subject.style.border = "1px solid #ccc";
         document.getElementById("myForm").reset();
         // removing thank you message after 4 seconds
-        setTimeout(function() {
+        setTimeout(function () {
             $('.thank_you').slideUp('slow');
         }, 4000);
         // stops form from being submitted
